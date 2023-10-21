@@ -5,15 +5,21 @@ import { getImageSrc } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/storeSlice";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const Card = ({ item }) => {
   // const cartItems = useSelector(state => state.store.items) 
   const dispatch = useDispatch()
   const img = getImageSrc(item?.img)
+  const navigate = useNavigate()
   return (
-    <div className="w-80 h-96 m-8  max-w-sm bg-[#F1F3F2] flex flex-col items-center relative overflow-hidden">
+    <div className="w-80 h-96 m-8  max-w-sm bg-[#F1F3F2] flex flex-col items-center relative overflow-hidden" onClick={(e) => {
+      e.stopPropagation()
+      navigate(`/store/${item?.id}`)
+    }}>
       <img
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation()
         dispatch(addToCart(item))
         toast.success("Item Added Successfully")
       }}
