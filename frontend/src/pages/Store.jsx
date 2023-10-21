@@ -8,14 +8,10 @@ const Store = () => {
     queryKey: ["products"],
     queryFn: () => fetchRequest("items"),
   });
-
-  console.log("====================================");
-  console.log(data, isLoading);
-  console.log("====================================");
   return (
     <div className="flex w-full flex-wrap">
       {data?.map((item) => (
-        <Card item={item} />
+        <Card item={item} key={item?.id} />
       ))}
     </div>
   );
