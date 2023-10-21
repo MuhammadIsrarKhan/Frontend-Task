@@ -59,43 +59,20 @@ const CreateItem = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     const validationPromises = [];
-
-    // Iterate over each form input and create a validation promise for each
     for (const inputName in newProductData) {
       if (Object.hasOwnProperty.call(newProductData, inputName)) {
         const validationPromise = addProductSchema
           .validateAt(inputName, newProductData)
-          .then(() => {
-            setErrorMessage((prevData) => ({
-              ...prevData,
-              [inputName + "Error"]: "",
-            }));
-          })
-          .catch((validationError) => {
-            setErrorMessage((prevData) => ({
-              ...prevData,
-              [inputName + "Error"]: validationError.message,
-            }));
-          });
-
         validationPromises.push(validationPromise);
       }
     }
-
-    // Wait for all validation promises to resolve
     Promise.all(validationPromises)
-      .then(() => {
-        const hasNoErrors = Object.values(errorMessage).every(
-          (error) => !error
-        );
-
-        if (hasNoErrors) {
-          mutate();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then(() => {
+      mutate()
+    })
+    .catch((validationError) => {
+      toast.error('Please fill the form with valid values');
+    });
   };
   return (
     <form onSubmit={submitHandler} className="bg-[#F1F3F2] py-5 px-5 max-w-lg">
@@ -115,7 +92,9 @@ const CreateItem = () => {
             setInputValue({ property: "name", value: e.target.value })
           }
         />
-         {errorMessage?.nameError && <ErrorMsg message={errorMessage?.nameError} />}
+        {errorMessage?.nameError && (
+          <ErrorMsg message={errorMessage?.nameError} />
+        )}
       </div>
       <div className="mb-6">
         <label
@@ -133,7 +112,9 @@ const CreateItem = () => {
             setInputValue({ property: "price", value: e.target.value })
           }
         />
-         {errorMessage?.priceError && <ErrorMsg message={errorMessage?.priceError} />}
+        {errorMessage?.priceError && (
+          <ErrorMsg message={errorMessage?.priceError} />
+        )}
       </div>
       <div className="mb-6">
         <label
@@ -152,7 +133,9 @@ const CreateItem = () => {
             setInputValue({ property: "img", value: e.target.value })
           }
         />
-        {errorMessage?.imgError && <ErrorMsg message={errorMessage?.imgError} />}
+        {errorMessage?.imgError && (
+          <ErrorMsg message={errorMessage?.imgError} />
+        )}
       </div>
 
       <button
