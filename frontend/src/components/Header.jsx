@@ -3,7 +3,9 @@ import { Collapse, Dropdown, initTE, Sidenav } from "tw-elements";
 import Logo from "@/assets/images/RandoStore.png";
 import { Link, NavLink } from "react-router-dom";
 import cart from "@/assets/cart.svg";
+import { useSelector } from "react-redux";
 const Header = () => {
+  const cartItems = useSelector((state) => state.store.items);
   useEffect(() => {
     initTE({ Collapse, Dropdown, Sidenav });
   });
@@ -107,16 +109,18 @@ const Header = () => {
               </li>
             </ul>
           </div>
-          <div class="relative flex items-center mr-10">
+          <Link to='/cart' class="relative flex items-center mr-10">
             <img
               src={cart}
               alt="cart"
               className="w-[30px] h-[30px] bg-white p-1 rounded-xl"
             />
             <div className="bg-white rounded-full w-4 h-4 flex items-center justify-center absolute -right-3 -top-2">
-              <small className="text-[8px] font-semibold">1</small>
+              <small className="text-[8px] font-semibold">
+                {cartItems.length}
+              </small>
             </div>
-          </div>
+          </Link>
         </div>
       </nav>
     </>

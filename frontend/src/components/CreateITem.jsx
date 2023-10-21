@@ -71,7 +71,7 @@ const CreateItem = () => {
       mutate()
     })
     .catch((validationError) => {
-      toast.error('Please fill the form with valid values');
+      toast.error('Please fill the form with valid inputs');
     });
   };
   return (
@@ -140,7 +140,7 @@ const CreateItem = () => {
 
       <button
         type="submit"
-        className="text-white mt-8 bg-[#B3D7C9] hover:bg-[#8ee8c6] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full  px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="text-white mt-8 bg-[#B3D7C9] hover:bg-[#8ee8c6] focus:ring-4 focus:outline-none focus:ring-[#8ee8c6] font-medium rounded-lg text-sm w-full  px-5 py-2.5 text-center"
       >
         Create
       </button>
