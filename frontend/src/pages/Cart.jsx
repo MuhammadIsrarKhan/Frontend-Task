@@ -1,7 +1,7 @@
 import CrossIcon from "@/assets/crossIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getImageSrc } from "../utils";
-import { removeFromCart } from "../store/storeSlice";
+import { clearCart, removeFromCart } from "../store/storeSlice";
 import { toast } from "sonner";
 const Cart = () => {
   const items = useSelector((state) => state.store.items);
@@ -56,11 +56,14 @@ const Cart = () => {
         </div>
       </div>
       <button
-      disabled={items.length == 0}
-      className={`${
-        items.length <= 0 && 'cursor-not-allowed'
-      } w-32 bg-black text-white py-2`}
-        onClick={() => toast.success("🛍️ Thank You for Shopping with Us! 🛒")}
+        disabled={items.length == 0}
+        className={`${
+          items.length <= 0 && "cursor-not-allowed"
+        } w-32 bg-black text-white py-2`}
+        onClick={() => {
+          toast.success("🛍️ Thank You for Shopping with Us! 🛒");
+          dispatch(clearCart())
+        }}
       >
         Checkout
       </button>
