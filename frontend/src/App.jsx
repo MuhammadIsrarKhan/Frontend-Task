@@ -7,6 +7,7 @@ import Store from "./pages/Store";
 import AddItem from "./pages/AddItem";
 import Cart from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -18,10 +19,11 @@ function App() {
         <Header />
         <Routes>
           <Route exact path="/" Component={Home} />
-          <Route exact path="/store" Component={Store} />
-          <Route exact path="/store/:id" Component={ProductDetail} />
-          <Route exact path="/add-item" Component={AddItem} />
-          <Route exact path="/cart" Component={Cart} />
+          <Route  path="/store" Component={Store} />
+          <Route  path="/store/:id" Component={ProductDetail} />
+          <Route  path="/add-item" Component={AddItem} />
+          <Route  path="/cart" Component={Cart} />
+          <Route  path="*" Component={NotFound} />
         </Routes>
       </div>
       <div className="self-start">

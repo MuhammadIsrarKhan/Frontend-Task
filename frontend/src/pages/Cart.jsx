@@ -62,7 +62,7 @@ const Cart = () => {
         } w-32 bg-black text-white py-2`}
         onClick={() => {
           toast.success("🛍️ Thank You for Shopping with Us! 🛒");
-          dispatch(clearCart())
+          dispatch(clearCart());
         }}
       >
         Checkout
