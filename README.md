@@ -1,4 +1,5 @@
 # Small E-Commerce Application
+![Home Page](RandoStore.png)
 
 ## Description
 
@@ -24,6 +25,13 @@ My E-Commerce Application is a web-based platform that allows users to browse an
 ## Installation
 
 1. Clone the repository to your local machine:
-
-   ```shell
    git clone https://github.com/your-username/your-repo.git
+2. Navigate to the project directory:
+   cd your-repo
+3. Install the project dependencies:
+4. Install the project dependencies:
+## Usage 
+- Browse through the list of items on the "Items" page.
+- Click "Add to Cart" to add items to your cart.
+- Navigate to the "Checkout" page to review the items in your cart.
+- The number of items in your cart will be persistent across different browser tabs.
