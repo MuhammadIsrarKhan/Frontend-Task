@@ -8,6 +8,9 @@ import { toast } from "sonner";
 const ProductDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
   const getItemDetail = () => fetchRequest(`items/${id}`);
   const { isLoading, data } = useQuery({
     queryKey: ["productDetail"],
@@ -17,8 +20,6 @@ const ProductDetail = () => {
     },
   });
   const img = getImageSrc(data?.img);
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: () => deleteRequest(`items/${id}`),

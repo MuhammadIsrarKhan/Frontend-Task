@@ -24,9 +24,8 @@ const CreateItem = () => {
       ...prevData,
       [property]: value,
     }));
-    // newProductData[property] = value;
     addProductSchema
-      .validateAt(property, newProductData)
+      .validateAt(property, { [property]: value })
       .then(() => {
         setErrorMessage((prevData) => ({
           ...prevData,
@@ -61,18 +60,20 @@ const CreateItem = () => {
     const validationPromises = [];
     for (const inputName in newProductData) {
       if (Object.hasOwnProperty.call(newProductData, inputName)) {
-        const validationPromise = addProductSchema
-          .validateAt(inputName, newProductData)
+        const validationPromise = addProductSchema.validateAt(
+          inputName,
+          newProductData
+        );
         validationPromises.push(validationPromise);
       }
     }
     Promise.all(validationPromises)
-    .then(() => {
-      mutate()
-    })
-    .catch((validationError) => {
-      toast.error('Please fill the form with valid inputs');
-    });
+      .then(() => {
+        mutate();
+      })
+      .catch((validationError) => {
+        toast.error("Please fill the form with valid inputs");
+      });
   };
   return (
     <form onSubmit={submitHandler} className="bg-[#F1F3F2] py-5 px-5 max-w-lg">
@@ -86,7 +87,7 @@ const CreateItem = () => {
         <input
           type="text"
           id="name"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Product name"
           onChange={(e) =>
             setInputValue({ property: "name", value: e.target.value })
@@ -107,7 +108,7 @@ const CreateItem = () => {
           type="number"
           id="price"
           placeholder="$99.00"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           onChange={(e) =>
             setInputValue({ property: "price", value: e.target.value })
           }
@@ -127,7 +128,7 @@ const CreateItem = () => {
           type="url"
           id="image"
           placeholder=" image url"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           // required
           onChange={(e) =>
             setInputValue({ property: "img", value: e.target.value })
