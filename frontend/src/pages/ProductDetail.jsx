@@ -1,8 +1,13 @@
 import { useNavigate, useParams } from "react-router";
-import { deleteRequest, fetchRequest, getImageSrc } from "../utils";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getImageSrc } from "../utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useStore } from "../hooks/useStore";
+import {
+  useDeleteProduct,
+  useProductDetail,
+} from "../controllers/productController";
+import { useEffect } from "react";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -10,32 +15,26 @@ const ProductDetail = () => {
   const queryClient = useQueryClient();
   const { dispatch } = useStore();
 
-  const getItemDetail = () => fetchRequest(`items/${id}`);
-  const { data } = useQuery({
-    queryKey: ["productDetail"],
-    queryFn: getItemDetail,
-    onError: () => {
-      navigate("/store");
-    },
-  });
+  const { data } = useProductDetail(id);
   const img = getImageSrc(data?.img);
 
-  const { mutate } = useMutation({
-    mutationFn: () => deleteRequest(`items/${id}`),
-    onSuccess: () => {
+  const { mutate, isSuccess, isError } = useDeleteProduct();
+
+  useEffect(() => {
+    if (isSuccess) {
       toast.success("Product deleted successfully!");
-      queryClient.invalidateQueries(),
-        setTimeout(() => {
-          navigate("/store");
-        }, 700);
-    },
-    onError: () => {
+      setTimeout(() => {
+        navigate("/store");
+      }, 700);
+    }
+
+    if (isError) {
       toast.error("An error occured while deleting a product");
-    },
-  });
+    }
+  }, [isSuccess, isError, navigate, queryClient]);
 
   const deleteHandler = () => {
-    mutate();
+    mutate(id);
   };
 
   const handleAddToCart = (item) => {

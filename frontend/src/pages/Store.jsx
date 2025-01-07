@@ -1,47 +1,40 @@
 import Card from "../components/Card";
-import { useQuery } from "@tanstack/react-query";
-import { fetchRequest } from "../utils";
 import Sort from "@/assets/sort.svg";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import NotFound from "./NotFound";
+import { useProducts } from "../controllers/productController";
 
 const Store = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [itemsToRender, setItemsToRender] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
-  const { data, isLoading,isSuccess } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => fetchRequest("items"),
-  });
-  useEffect(() => {
-    if (data) {
-      setItemsToRender(data);
-    }
+
+  const { data, isLoading, isSuccess } = useProducts();
+
+  const filteredAndSortedItems = useMemo(() => {
+    if (!data) return [];
+
+    let filteredData = data;
     if (searchQuery) {
-      const filteredData = itemsToRender.filter((item) =>
+      filteredData = data.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setItemsToRender(filteredData);
     }
-  }, [data, searchQuery]);
+
+    return filteredData.sort((a, b) => {
+      if (!a.name || !b.name) return 0;
+      return sortOrder === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    });
+  }, [data, searchQuery, sortOrder]);
 
   const toggleSortOrder = () => {
-    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
-    setSortOrder(newSortOrder);
-
-    const sortedProducts = [...itemsToRender]?.sort((a, b) => {
-      if (newSortOrder === "asc") {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
-
-    setItemsToRender(sortedProducts);
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   };
+
   return (
     <div className="flex flex-col">
-      {/* search input start */}
+      {/* Search input */}
       <div className="relative flex w-[300px] m-8 mb-3 flex-wrap items-stretch">
         <input
           type="search"
@@ -51,8 +44,6 @@ const Store = () => {
           aria-describedby="button-addon1"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-
-        {/* <!--Search button--> */}
         <button
           className="relative z-[2] flex items-center rounded-r bg-[#267356] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-[#194d39] hover:shadow-lg focus:bg-[#267356] focus:shadow-lg focus:outline-none focus:ring-0 active:bg-[#267356] active:shadow-lg"
           type="button"
@@ -67,15 +58,14 @@ const Store = () => {
             className="h-5 w-5"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
           </svg>
         </button>
       </div>
-      {/* search input end */}
-      {/* sort btns start */}
+      {/* Sort button */}
       <div className="flex gap-2">
         <button
           onClick={toggleSortOrder}
@@ -86,7 +76,7 @@ const Store = () => {
           Sort Items
         </button>
       </div>
-      {/* sort btns end */}
+      {/* Items list */}
       <div className="flex w-full flex-wrap">
         {isLoading ? (
           <div className="w-full h-full flex items-center justify-center">
@@ -99,8 +89,12 @@ const Store = () => {
               </span>
             </div>
           </div>
-        ) : !isSuccess ? <NotFound /> :  (
-          itemsToRender?.map((item) => <Card item={item} key={item?.id} />)
+        ) : !isSuccess ? (
+          <NotFound />
+        ) : (
+          filteredAndSortedItems.map((item) => (
+            <Card item={item} key={item?.id} />
+          ))
         )}
       </div>
     </div>
