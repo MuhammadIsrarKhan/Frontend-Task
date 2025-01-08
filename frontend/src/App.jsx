@@ -8,6 +8,7 @@ import AddItem from "./pages/AddItem";
 import Cart from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
+import ErrorBoundary from "./utils/ErrorBoundry";
 
 function App() {
   return (
@@ -16,15 +17,17 @@ function App() {
       style={{ backgroundImage: `url(${HeroImg})` }}
     >
       <div className="flex-grow-1">
-        <Header />
-        <Routes>
-          <Route exact path="/" Component={Home} />
-          <Route  path="/store" Component={Store} />
-          <Route  path="/store/:id" Component={ProductDetail} />
-          <Route  path="/add-item" Component={AddItem} />
-          <Route  path="/cart" Component={Cart} />
-          <Route  path="*" Component={NotFound} />
-        </Routes>
+        <ErrorBoundary>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/store/:id" element={<ProductDetail />} />
+            <Route path="/add-item" element={<AddItem />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ErrorBoundary>
       </div>
       <div className="self-start">
         <Footer />

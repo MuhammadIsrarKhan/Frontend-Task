@@ -9,12 +9,12 @@ import { StoreProvider } from "./contexts/store.jsx";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <StoreProvider>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
+  <StoreProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
           <App />
-        </QueryClientProvider>
-        <Toaster />
-      </BrowserRouter>
-    </StoreProvider>
+      </QueryClientProvider>
+      <Toaster />
+    </BrowserRouter>
+  </StoreProvider>
 );
